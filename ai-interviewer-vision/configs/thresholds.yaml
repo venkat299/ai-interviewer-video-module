@@ -1,0 +1,4 @@
+thresholds:
+  real: 0.32
+  uncertain: 0.52
+  fake: 0.72
