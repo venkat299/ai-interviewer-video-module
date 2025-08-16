@@ -1,0 +1,8 @@
+services:
+  vision:
+    build: ./docker
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    ports: ["8000:8000", "9100:9100"]
+    volumes: ["./models:/app/models"]

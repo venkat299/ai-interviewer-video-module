@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Interviewer Demo</title>
+</head>
+<body>
+<video id="video" width="640" height="480" autoplay muted></video>
+<canvas id="canvas" width="640" height="480" style="display:none"></canvas>
+<img id="annot" width="640" height="480" />
+<pre id="out"></pre>
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const img = document.getElementById('annot');
+const out = document.getElementById('out');
+
+async function init() {
+  const stream = await navigator.mediaDevices.getUserMedia({video:{width:640,height:480}});
+  video.srcObject = stream;
+  const ws = new WebSocket('ws://' + location.host + '/stream');
+  ws.onmessage = ev => {
+    out.textContent = ev.data;
+  };
+  setInterval(() => {
+    ctx.drawImage(video,0,0,640,480);
+    canvas.toBlob(b=> ws.send(b),'image/jpeg');
+  }, 200);
+}
+init();
+</script>
+</body>
+</html>
